@@ -1,6 +1,9 @@
 import static org.junit.Assert.*;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import org.junit.Test;
@@ -72,10 +75,15 @@ public class RLECompressTest {
 	@Test
 	public void compressDecompress() throws IOException
 	{
+		FileWriter writer = new FileWriter(new File("hello.txt"));
+		writer.write("heeeeeeeeelloo.txt");
+		writer.close();
 		RLECompress c = new RLECompress();
 		c.compress(new File("hello.txt"), new File("hello.txt.rle"));
 		c.decompress(new File("hello.txt.rle"), new File("hello2.txt"));
-		
+		BufferedReader reader = new BufferedReader (new FileReader(new File("hello2.txt")));
+		String s = reader.readLine();
+		assertEquals("heeeeeeeeelloo.txt", s);
 	}
 
 	

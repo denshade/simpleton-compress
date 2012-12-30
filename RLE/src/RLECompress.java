@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -39,9 +40,12 @@ public class RLECompress
 		BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(destinationFile));
 		
 		byte[] readBytes = new byte[65536];
-		while (inputStream.read(readBytes) > 0)
+		int bytesRead = inputStream.read(readBytes) ;
+		while (bytesRead > 0)
 		{
-			outputStream.write(compressBuffer(readBytes));
+			byte[] src = Arrays.copyOf(readBytes, bytesRead);
+			outputStream.write(compressBuffer(src));
+			bytesRead = inputStream.read(readBytes) ;
 		}
 		inputStream.close();
 		outputStream.close();
@@ -53,9 +57,13 @@ public class RLECompress
 		BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(destinationFile));
 		
 		byte[] readBytes = new byte[65536];
-		while (inputStream.read(readBytes) > 0)
+		int bytesRead = inputStream.read(readBytes) ;
+		
+		while (bytesRead  > 0)
 		{
-			outputStream.write(decompressBuffer(readBytes));
+			byte[] src = Arrays.copyOf(readBytes, bytesRead);
+			outputStream.write(decompressBuffer(src));
+			bytesRead = inputStream.read(readBytes) ;
 		}
 		inputStream.close();
 		outputStream.close();
