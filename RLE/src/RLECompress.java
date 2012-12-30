@@ -44,6 +44,7 @@ public class RLECompress
 			outputStream.write(compressBuffer(readBytes));
 		}
 		inputStream.close();
+		outputStream.close();
 	}
 	
 	public void decompress(File sourceFile, File destinationFile) throws IOException
@@ -57,6 +58,7 @@ public class RLECompress
 			outputStream.write(decompressBuffer(readBytes));
 		}
 		inputStream.close();
+		outputStream.close();
 	}
 	
 	protected byte[] decompressBuffer(byte[] buffer)
@@ -66,7 +68,7 @@ public class RLECompress
 		{
 			if (buffer[current] == conversionByte)
 			{
-				byte size = buffer[current + 1];
+				int size = (int)buffer[current + 1] & 0xff;
 				if (size == 0)
 				{
 					converted.add(conversionByte);current++;
@@ -97,7 +99,7 @@ public class RLECompress
 			byte currentByte = buffer[current];
 			if (hasPreviousElement(decisionBuffer))
 			{
-				if (decisionBuffer.get(0) != currentByte)
+				if (decisionBuffer.get(0) != currentByte || decisionBuffer.size() == 255)
 				{
 					writeDecisionBuffer(decisionBuffer, converted);
 					decisionBuffer.clear();
